@@ -161,7 +161,7 @@ namespace PromotionEngineTest
 
         }
         [Fact]
-        public void Test1()
+        public void ShouldPassIfPercentDiscountApplied()
 
         {  // ARRANGE
             var productA = new SKUItems { Price = 50m, SKUId = "A" };
@@ -169,7 +169,7 @@ namespace PromotionEngineTest
             var productC = new SKUItems { Price = 20m, SKUId = "C" };
             var productD = new SKUItems { Price = 15m, SKUId = "D" };
 
-            using (StreamReader r = new StreamReader(@"Settings.json"))
+            using (StreamReader r = new StreamReader(@"Settings1.json"))
             {
                 string data = r.ReadToEnd();
                 promtionRules = JsonConvert.DeserializeObject<List<PromotionRules>>(data);
@@ -179,7 +179,6 @@ namespace PromotionEngineTest
                 Products = new List<SKUItems> {
                     productA,  productA, productA,
                     productB, productB, productB, productB, productB,
-                    productC,
                     productD }
             };
 
@@ -191,7 +190,42 @@ namespace PromotionEngineTest
             PromotionCart result = sut.Run();
 
             // ASSERT
-            const decimal expectedTotal = 280m;
+            const decimal expectedTotal = 264.55M;
+
+            result.TotalValue.Should().Be(expectedTotal);
+
+        }
+        [Fact]
+        public void ShouldPassOnlyOneDiscountMusteBeApplied()
+
+        {  // ARRANGE
+            var productA = new SKUItems { Price = 50m, SKUId = "A" };
+            var productB = new SKUItems { Price = 30m, SKUId = "B" };
+            var productC = new SKUItems { Price = 20m, SKUId = "C" };
+            var productD = new SKUItems { Price = 15m, SKUId = "D" };
+
+            using (StreamReader r = new StreamReader(@"Settings2.json"))
+            {
+                string data = r.ReadToEnd();
+                promtionRules = JsonConvert.DeserializeObject<List<PromotionRules>>(data);
+            }
+            var cart = new PromotionCart
+            {
+                Products = new List<SKUItems> {
+                    productA,  productA, productA,
+                    productB, productB, productB, productB, productB,
+                    productD }
+            };
+
+
+
+            var sut = new PromotionEngineCalculator(cart, promtionRules);
+
+            // ACT
+            PromotionCart result = sut.Run();
+
+            // ASSERT
+            const decimal expectedTotal = 250M;
 
             result.TotalValue.Should().Be(expectedTotal);
 

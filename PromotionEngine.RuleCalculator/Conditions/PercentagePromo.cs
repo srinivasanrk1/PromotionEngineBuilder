@@ -25,7 +25,7 @@ namespace PromotionEngine.RuleCalculator.Conditions
         {
             if (_actual == _promotionRules.Count)
             {
-                DiscountPrice = ((decimal)_price * _promotionRules.PromotionValue) / 100;
+                DiscountPrice = decimal.Negate(((decimal)_price *  _promotionRules.PromotionValue) / 100);
                 SKUid = _promotionRules.SKUids;
                 return true;
             }

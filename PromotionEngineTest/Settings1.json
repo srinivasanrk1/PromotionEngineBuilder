@@ -4,12 +4,6 @@
   // 2 => Percentage discount apply disc
 
   {
-    "PromotionType": 1,
-    "SKUIds": "C,D",
-    "Count": 0,
-    "PromotionValue": "-5.00"
-  },
-  {
     "PromotionType": 0,
     "SKUIds": "A",
     "Count": 3,
@@ -21,11 +15,16 @@
     "Count": 2,
     "PromotionValue": "-15.00"
   },
-
   {
     "PromotionType": 2,
     "SKUIds": "D",
     "Count": 1,
     "PromotionValue": "3"
+  },
+  {
+    "PromotionType": 0,
+    "SKUIds": "D",
+    "Count": 1,
+    "PromotionValue": "-15.00"
   }
 ]
