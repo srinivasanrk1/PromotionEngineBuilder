@@ -1,0 +1,27 @@
+[
+  {
+    "PromotionType": 1,
+    "SKUIds": "C,D",
+    "Count": 0,
+    "PromotionValue": "-5.00"
+  },
+  {
+    "PromotionType": 0,
+    "SKUIds": "A",
+    "Count": 3,
+    "PromotionValue": "-20.00"
+  },
+  {
+    "PromotionType": 0,
+    "SKUIds": "B",
+    "Count": 2,
+    "PromotionValue": "-15.00"
+  },
+
+  {
+    "PromotionType": 0,
+    "SKUIds": "D",
+    "Count": 1,
+    "PromotionValue": "-5.00"
+  }
+]
