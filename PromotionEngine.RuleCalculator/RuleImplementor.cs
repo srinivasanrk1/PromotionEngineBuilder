@@ -31,14 +31,20 @@ namespace PromotionEngine.RuleCalculator
         {
             Conditions.Clear();
         }
+        bool validateCart(PromotionCart promotionCart)
+        {
+            return promotionCart.Products == null ? true :
+                   promotionCart?.TotalValue == 0 ? true : false;
+
+        }
 
         void IRule<PromotionCart>.Initialize(PromotionCart promotionCart)
         {
             int cartValue = 0;
-            if (promotionCart.TotalValue == 0) return;
+            if (validateCart(promotionCart)) return;
             foreach (var promotionRule in _promtionRules)
             {
-                bool validate = Conditions.Any(o => o.SKUid.Contains(promotionRule.SKUids) &&  o.CondnPassed());
+                bool validate = Conditions.Any(o => o.SKUid.Contains(promotionRule.SKUids) && o.CondnPassed());
                 if (validate) continue;
                 switch (promotionRule.PromotionType)
                 {

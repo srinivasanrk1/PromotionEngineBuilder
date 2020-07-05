@@ -14,7 +14,7 @@ namespace PromotionEngine.DTO
 
         public decimal TotalValue
         {
-            get { return Products.Sum(p => p.Price); }
+            get { return (Products == null) ? 0 : Products.Sum(p => p.Price); }
         }
     }
 }

@@ -20,12 +20,5 @@
     "SKUIds": "B",
     "Count": 2,
     "PromotionValue": "-15.00"
-  },
-
-  {
-    "PromotionType": 2,
-    "SKUIds": "D",
-    "Count": 1,
-    "PromotionValue": "3"
   }
 ]

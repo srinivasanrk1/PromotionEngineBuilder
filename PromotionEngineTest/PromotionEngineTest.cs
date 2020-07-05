@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using PromotionEngine.DTO;
 using PromotionEngine.RuleCalculator;
 using FluentAssertions;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
@@ -20,6 +19,22 @@ namespace PromotionEngineTest
                 string data = r.ReadToEnd();
                 promtionRules = JsonConvert.DeserializeObject<List<PromotionRules>>(data);
             }
+        }
+        [Fact]
+        public void ShouldAcceptIfNoValuesInCart()
+
+        {
+
+            var cart = new PromotionCart
+            {
+                Products = null
+            };
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
+            // ACT
+            PromotionCart result = testObj.Run();
+
+            // ASSERT
+            result.TotalValue.Should().Be(0M);
         }
         [Fact]
         public void ShouldAcceptDeafultValues()
@@ -42,10 +57,10 @@ namespace PromotionEngineTest
 
 
 
-            var sut = new PromotionEngineCalculator(cart, promtionRules);
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
 
             // ACT
-            PromotionCart result = sut.Run();
+            PromotionCart result = testObj.Run();
 
             // ASSERT
             const decimal expectedTotal = 0M;
@@ -77,10 +92,10 @@ namespace PromotionEngineTest
 
 
 
-            var sut = new PromotionEngineCalculator(cart, promtionRules);
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
 
             // ACT
-            PromotionCart result = sut.Run();
+            PromotionCart result = testObj.Run();
 
             // ASSERT
             const decimal expectedTotal = 100m;
@@ -113,10 +128,10 @@ namespace PromotionEngineTest
 
 
 
-            var sut = new PromotionEngineCalculator(cart, promtionRules);
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
 
             // ACT
-            PromotionCart result = sut.Run();
+            PromotionCart result = testObj.Run();
 
             // ASSERT
             const decimal expectedTotal = 370M;
@@ -149,13 +164,48 @@ namespace PromotionEngineTest
 
 
 
-            var sut = new PromotionEngineCalculator(cart, promtionRules);
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
 
             // ACT
-            PromotionCart result = sut.Run();
+            PromotionCart result = testObj.Run();
 
             // ASSERT
             const decimal expectedTotal = 280m;
+
+            result.TotalValue.Should().Be(expectedTotal);
+
+        }
+        [Fact]
+        public void ShouldPassMultipleItemsofSameProductDiscApplied()
+
+        {  // ARRANGE
+            var productA = new SKUItems { Price = 50m, SKUId = "A" };
+            var productB = new SKUItems { Price = 30m, SKUId = "B" };
+            var productC = new SKUItems { Price = 20m, SKUId = "C" };
+            var productD = new SKUItems { Price = 15m, SKUId = "D" };
+
+            using (StreamReader r = new StreamReader(@"Settings.json"))
+            {
+                string data = r.ReadToEnd();
+                promtionRules = JsonConvert.DeserializeObject<List<PromotionRules>>(data);
+            }
+            var cart = new PromotionCart
+            {
+                Products = new List<SKUItems> {
+                    productA,  productA, productA,productA,  productA, productA,productA,  productA, productA,productA,  productA,
+                    productB, productB, productB, productB, productB,
+                    productD }
+            };
+
+            //11 ProductsA = 550 , 5 productB = 150 , 1   productD =15
+            //  - 60 For 3 set Disc applied , 2 No Discount , -30 2 sets Disc applied 
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
+
+            // ACT
+            PromotionCart result = testObj.Run();
+
+            // ASSERT
+            const decimal expectedTotal = 625M;
 
             result.TotalValue.Should().Be(expectedTotal);
 
@@ -184,10 +234,10 @@ namespace PromotionEngineTest
 
 
 
-            var sut = new PromotionEngineCalculator(cart, promtionRules);
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
 
             // ACT
-            PromotionCart result = sut.Run();
+            PromotionCart result = testObj.Run();
 
             // ASSERT
             const decimal expectedTotal = 264.55M;
@@ -219,10 +269,10 @@ namespace PromotionEngineTest
 
 
 
-            var sut = new PromotionEngineCalculator(cart, promtionRules);
+            var testObj = new PromotionEngineCalculator(cart, promtionRules);
 
             // ACT
-            PromotionCart result = sut.Run();
+            PromotionCart result = testObj.Run();
 
             // ASSERT
             const decimal expectedTotal = 250M;
